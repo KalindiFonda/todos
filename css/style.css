@@ -1,0 +1,19 @@
+input {
+	max-width: 120px;
+	opacity: .8;
+}
+
+h1 {
+	padding-bottom: 2%;
+}
+
+
+.todo {
+	position: fixed;
+	font-size: 60vw;
+	margin-top: -18%;
+	color: red;
+	opacity: .3;
+	z-index: -1;
+	font-weight: bold;
+}

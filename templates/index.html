@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="css/style.css">
+    <title>TODOs</title>
+    <link rel="shortcut icon" href="http://www.iconj.com/ico/f/8/f88v7jzah6.ico" type="image/x-icon">
+    <meta name="description" content="gimme the todos">
+    <meta name="viewport" content="width=device-width, initial-scale=0.5">
+  </head>
+  <body>
+    <h1> How many things do I wanna do?</h1>
+    <p class="todo">{{total}}</p>
+
+    <form method="post" action="/">
+      <table>
+        <tr>
+          <td>New:</td>
+          <td><input name="new" type="number" value=0 required></td>
+        </tr>
+        <tr>
+          <td>Done:</td>
+          <td><input name="done" type="number" value=0 required></td>
+        </tr>
+        <tr>
+          <td>Retired:</td>
+          <td><input name="retired" type="number" value=0 required></td>
+        </tr>
+        <tr>
+          <td>Date:</td>
+          <td><input name="date" type="date" value="{{today}}"></td>
+        </tr>
+        <tr>
+          <td></td><td><input type="submit"></td>
+        </tr>
+      </table>
+    </form>
+
+    <p>
+      Today added {{new}}, done {{done}}, retired {{retired}}
+    </p>
+
+    <h2>Great life!</h2>
+
+  </body>
+</html>
