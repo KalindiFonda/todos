@@ -3,8 +3,9 @@
 import os
 import webapp2
 import jinja2
-import time
 import datetime
+
+import time # for delay
 
 from google.appengine.ext import ndb
 
@@ -19,37 +20,54 @@ class Todo_day(ndb.Model):
     new = ndb.IntegerProperty()
     done = ndb.IntegerProperty()
     retired = ndb.IntegerProperty()
-    tot = ndb.IntegerProperty()
-    tot_on_day = ndb.IntegerProperty()
 
     todos_date = ndb.DateProperty()
     date = ndb.DateTimeProperty(auto_now_add=True)
 
 
+def populate():
+    """populate db with some days"""
+    day1 = Todo_day( new = 0, done = 0, retired = 0,
+            todos_date = datetime.datetime.strptime("2017-04-01", "%Y-%m-%d"))
 
+    day2 = Todo_day(new = 10, done = 2, retired = 0,
+        todos_date = datetime.datetime.strptime("2017-04-02", "%Y-%m-%d"))
+
+    day3 = Todo_day(new = 4, done = 1, retired = 3,
+            todos_date = datetime.datetime.strptime("2017-04-03", "%Y-%m-%d"))
+
+    day1.put()
+    day2.put()
+    day3.put()
+    time.sleep(.1)
 
 def get_tot():
     entries = Todo_day.query().order(Todo_day.date).fetch()
-    print entries
+
+    if not entries:
+        # if DB empty create some entries
+        populate()
+        entries = Todo_day.query().order(Todo_day.date).fetch()
 
     total, new, done, retired = 0, 0, 0, 0
 
     for entry in entries:
-        total += entry.tot
+        total += entry.new - entry.done - entry.retired
+        entry.tot_on_day = total
         if entry.todos_date == datetime.date.today():
             new += entry.new
             done += entry.done
             retired += entry.retired
-        entry.tot_on_day = total
 
     template_values = {
-        "today" : time.strftime("%Y-%m-%d"),
+        "today" : str(datetime.date.today()),
         "total" : total,
         "new" : new,
         "done" : done,
         "retired" : retired,
         "entries" : entries
     }
+
     return template_values
 
 def get_template_values(template):
@@ -69,6 +87,7 @@ class Page(webapp2.RequestHandler):
 
     def get(self, reg_input="index"):
 
+
         template_values = get_template_values(reg_input)
         html_template = reg_input + ".html"
 
@@ -84,13 +103,11 @@ class Page(webapp2.RequestHandler):
         todo_date = datetime.datetime.strptime(
                         self.request.get('date'), "%Y-%m-%d"
                     )
-        tot_day = todo_new - todo_done - todo_retired
 
         todo_day = Todo_day(
             new = todo_new,
             done = todo_done,
             retired = todo_retired,
-            tot = tot_day,
             todos_date = todo_date
         )
 
