@@ -27,18 +27,16 @@ class Todo_day(ndb.Model):
 
 def populate():
     """populate db with some days"""
-    day1 = Todo_day( new = 0, done = 0, retired = 0,
-            todos_date = datetime.datetime.strptime("2017-04-01", "%Y-%m-%d"))
+    days = [[0,0,0,"2017-03-29"],
+            [190,6,0,"2017-03-30"],
+            [19,17,0,"2017-03-31"],
+            [57,12,0,"2017-04-01"]]
 
-    day2 = Todo_day(new = 10, done = 2, retired = 0,
-        todos_date = datetime.datetime.strptime("2017-04-02", "%Y-%m-%d"))
+    for day in days:
+        day_instance = Todo_day( new = day[0], done = day[1], retired = day[2],
+            todos_date = datetime.datetime.strptime(day[3], "%Y-%m-%d"))
+        day_instance.put()
 
-    day3 = Todo_day(new = 4, done = 1, retired = 3,
-            todos_date = datetime.datetime.strptime("2017-04-03", "%Y-%m-%d"))
-
-    day1.put()
-    day2.put()
-    day3.put()
     time.sleep(.1)
 
 def get_tot():
